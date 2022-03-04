@@ -58,7 +58,25 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
+  const playSound = (e) => {
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if (!audio) return; // stop the function from running all together
+    audio.currentTime = 0; // rewind to start
+    audio.play();
+    key.classList.add('playing'); // key.addClass('playing');는 jquery라 여기선 사용 x
+  };
 
+
+  const removeTransition = (e) => {
+    if (e.propertyName !== 'transform') return; //stop it if it's not a transform
+    e.target.classList.remove('playing');
+  };
+
+  // settimeout으로 css가 변경될 때마다 인자를 변경할 필요 없음
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+  window.addEventListener('keydown', playSound);
 </script>
 
 
